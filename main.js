@@ -1,4 +1,3 @@
-// boxes = document.querySelectorAll(".square");
 function getRandomSquare(n) {
   return Math.floor(Math.random() * n);
 }
@@ -47,23 +46,58 @@ class Game {
       case 'left':
         for (let row = 0; row < this.n; row++) {
           let leftMostUndefined = 0;
+          let mergeable = undefined;
           for (let col = 0; col < this.n; col++) {
             const element = this.board[row][col];
             if (element) {
+              this.board[row][col] = undefined;
               this.board[row][leftMostUndefined] = element;
-              if (col != leftMostUndefined) {
-                this.board[row][col] = undefined;
-              }
               leftMostUndefined++;
             }
           }
         }
         break;
       case 'right':
+        for (let row = 0; row < this.n; row++) {
+          let rightMostUndefined = this.n - 1;
+          let mergeable = undefined;
+          for (let col = this.n - 1; col >= 0; col--) {
+            const element = this.board[row][col];
+            if (element) {
+              this.board[row][col] = undefined;
+              this.board[row][rightMostUndefined] = element;
+              rightMostUndefined--;
+            }
+          }
+        }
         break;
-      case 'top':
+      case 'up':
+        for (let col = 0; col < this.n; col++) {
+          let upMostUndefined = 0;
+          let mergeable = undefined;
+          for (let row = 0; row < this.n; row++) {
+            const element = this.board[row][col];
+            if (element) {
+              this.board[row][col] = undefined;
+              this.board[upMostUndefined][col] = element;
+              upMostUndefined++;
+            }
+          }
+        }
         break;
       case 'down':
+        for (let col = 0; col < this.n; col++) {
+          let downMostUndefined = this.n - 1;
+          let mergeable = undefined;
+          for (let row = this.n - 1; row >= 0; row--) {
+            const element = this.board[row][col];
+            if (element) {
+              this.board[row][col] = undefined;
+              this.board[downMostUndefined][col] = element;
+              downMostUndefined--;
+            }
+          }
+        }
         break;
     }
   }
