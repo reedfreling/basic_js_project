@@ -73,8 +73,8 @@ class Game {
               } else {
                 this.board[row][leftMostUndefined] = element;
                 mergeable = element;
+                leftMostUndefined++;
               }
-              leftMostUndefined++;
             }
           }
         }
@@ -94,8 +94,8 @@ class Game {
               } else {
                 this.board[row][rightMostUndefined] = element;
                 mergeable = element;
+                rightMostUndefined--;
               }
-              rightMostUndefined--;
             }
           }
         }
@@ -115,8 +115,8 @@ class Game {
               } else {
                 this.board[upMostUndefined][col] = element;
                 mergeable = element;
+                upMostUndefined++;
               }
-              upMostUndefined++;
             }
           }
         }
@@ -136,14 +136,15 @@ class Game {
               } else {
                 this.board[downMostUndefined][col] = element;
                 mergeable = element;
+                downMostUndefined--;
               }
-              downMostUndefined--;
             }
           }
         }
         break;
     }
 
+    // TODO: fix loss condition as all tiles having value does not actually mean a loss
     const unfilledCells = [];
     this.board.forEach((row, rowNum) => row.forEach((el, colNum) => {
       if (el === undefined) {
