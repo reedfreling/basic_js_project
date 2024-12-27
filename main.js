@@ -57,7 +57,6 @@ class Game {
 
   move(direction) {
     console.log(`Moving in direction: ${direction}`);
-    console.log(this.board);
     switch (direction) {
       case 'left':
         for (let row = 0; row < this.n; row++) {
@@ -204,24 +203,26 @@ function updateBoxes() {
 updateBoxes();
 
 document.addEventListener('keydown', e => {
-  // let gameState;
-  e.preventDefault();
   switch (e.key) {
     case 'ArrowLeft':
-      gameState = game.move('left');
+      e.preventDefault();
+      game.move('left');
       break;
     case 'ArrowRight':
-      gameState = game.move('right');
+      e.preventDefault();
+      game.move('right');
       break;
     case 'ArrowDown':
-      gameState = game.move('down');
+      e.preventDefault();
+      game.move('down');
       break;
     case 'ArrowUp':
-      gameState = game.move('up');
+      e.preventDefault();
+      game.move('up');
       break;
   }
 
-  const { canContinue: canContinue } = gameState;
+  const { canContinue: canContinue } = game.gameState;
   updateBoxes();
   if (!canContinue) {
     const restartButton = document.createElement('button');
