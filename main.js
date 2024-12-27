@@ -2,6 +2,16 @@ function getRandomSquare(n) {
   return Math.floor(Math.random() * n);
 }
 
+// this is pretty arbitrary
+function getColorForValue(n) {
+  const exponentModThree = Math.log2(n) % 3;
+  const red = exponentModThree === 0 ? Math.floor(Math.log2(n) / 30 * 256) : 0; 
+  const green = exponentModThree === 1 ? Math.floor(256 - (Math.log2(n) / 30 * 256)) : 0;
+  const blue = exponentModThree === 2 ? Math.floor(256 - (Math.log2(n) / 30 * 256)) : 0;
+
+  return `rgb(${red},${green},${blue})`
+}
+
 const mainGrid = document.querySelector('#main-grid');
 
 const boxStyling = 'color: gray; padding: 0; line-height: 100%;';
@@ -174,8 +184,10 @@ function setSquareValue(box, value) {
     const boxNumber = document.createElement('p');
     boxNumber.innerText = `${value}`;
     boxNumber.style = boxStyling;
+    box.style.backgroundColor = getColorForValue(value);
     box.replaceChildren(boxNumber);
   } else {
+    box.style.backgroundColor = '';
     box.replaceChildren();
   }
 }
