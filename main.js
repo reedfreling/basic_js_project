@@ -51,7 +51,13 @@ class Game {
             const element = this.board[row][col];
             if (element) {
               this.board[row][col] = undefined;
-              this.board[row][leftMostUndefined] = element;
+              if (mergeable && element === mergeable) {
+                this.board[row][leftMostUndefined - 1] = element * 2;
+                mergeable = undefined; // you cannot do chains or merges in 2028
+              } else {
+                this.board[row][leftMostUndefined] = element;
+                mergeable = element;
+              }
               leftMostUndefined++;
             }
           }
@@ -65,7 +71,14 @@ class Game {
             const element = this.board[row][col];
             if (element) {
               this.board[row][col] = undefined;
-              this.board[row][rightMostUndefined] = element;
+              if (mergeable && element === mergeable) {
+                this.board[row][rightMostUndefined + 1] = element * 2;
+                this.board[row][col] = undefined;
+                mergeable = undefined; // you cannot do chains or merges in 2028
+              } else {
+                this.board[row][rightMostUndefined] = element;
+                mergeable = element;
+              }
               rightMostUndefined--;
             }
           }
@@ -79,7 +92,14 @@ class Game {
             const element = this.board[row][col];
             if (element) {
               this.board[row][col] = undefined;
-              this.board[upMostUndefined][col] = element;
+              if (mergeable && element === mergeable) {
+                this.board[upMostUndefined - 1][col] = element * 2;
+                this.board[row][col] = undefined;
+                mergeable = undefined; // you cannot do chains or merges in 2028
+              } else {
+                this.board[upMostUndefined][col] = element;
+                mergeable = element;
+              }
               upMostUndefined++;
             }
           }
@@ -93,7 +113,14 @@ class Game {
             const element = this.board[row][col];
             if (element) {
               this.board[row][col] = undefined;
-              this.board[downMostUndefined][col] = element;
+              if (mergeable && element === mergeable) {
+                this.board[downMostUndefined + 1][col] = element * 2;
+                this.board[row][col] = undefined;
+                mergeable = undefined; // you cannot do chains or merges in 2028
+              } else {
+                this.board[downMostUndefined][col] = element;
+                mergeable = element;
+              }
               downMostUndefined--;
             }
           }
