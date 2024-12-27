@@ -2,6 +2,8 @@ function getRandomSquare(n) {
   return Math.floor(Math.random() * n);
 }
 
+const mainGrid = document.querySelector('#main-grid');
+
 const boxStyling = 'color: gray; padding: 0; line-height: 100%;';
 
 const numRows = 4;
@@ -29,6 +31,10 @@ class Game {
 
     this.board[firstRow][firstCol] = 2;
     this.board[secondRow][secondCol] = 2;
+
+    this.gameState = {
+      canContinue: true,
+    };
   }
 
   getRowAndCol(i) {
@@ -127,6 +133,23 @@ class Game {
         }
         break;
     }
+
+    const unfilledCells = [];
+    this.board.forEach((row, rowNum) => row.forEach((el, colNum) => {
+      if (el === undefined) {
+        unfilledCells.push({row: rowNum, col: colNum});
+      }
+    }));
+    const canContinue = unfilledCells.length > 0;
+    this.gameState = {
+      canContinue: canContinue,
+    };
+    if (canContinue) {
+      const { row: row, col: col } = unfilledCells[getRandomSquare(unfilledCells.length)];
+      this.board[row][col] = 2;
+    }
+
+    return this.gameState;
   }
 
   getSquareValues() {
@@ -168,21 +191,30 @@ function updateBoxes() {
 updateBoxes();
 
 document.addEventListener('keydown', e => {
+  // let gameState;
   e.preventDefault();
   switch (e.key) {
     case 'ArrowLeft':
-      game.move('left');
+      gameState = game.move('left');
       break;
     case 'ArrowRight':
-      game.move('right');
+      gameState = game.move('right');
       break;
     case 'ArrowDown':
-      game.move('down');
+      gameState = game.move('down');
       break;
     case 'ArrowUp':
-      game.move('up');
+      gameState = game.move('up');
       break;
   }
 
+  const { canContinue: canContinue } = gameState;
   updateBoxes();
+  if (!canContinue) {
+    const restartButton = document.createElement('button');
+    restartButton.innerText = 'Do you wish to restart?'
+    restartButton.style.gridRow = 1;
+    restartButton.style.gridColumn = 2;
+    mainGrid.appendChild(restartButton);
+  }
 });
